@@ -1,0 +1,41 @@
+{
+    "entities": {
+        "vehicle_make:vehicle_make": [
+            {
+                "body": "porsche",
+                "confidence": 0.9906,
+                "end": 33,
+                "entities": [],
+                "id": "653663692212420",
+                "name": "vehicle_make",
+                "role": "vehicle_make",
+                "start": 26,
+                "type": "value",
+                "value": "porsche"
+            }
+        ],
+        "vehicle_model:vehicle_model": [
+            {
+                "body": "911",
+                "confidence": 0.9871,
+                "end": 37,
+                "entities": [],
+                "id": "687853305183344",
+                "name": "vehicle_model",
+                "role": "vehicle_model",
+                "start": 34,
+                "type": "value",
+                "value": "911"
+            }
+        ]
+    },
+    "intents": [
+        {
+            "confidence": 0.9564,
+            "id": "682708702665169",
+            "name": "research_vehicle"
+        }
+    ],
+    "text": "i want to learn about the porsche 911",
+    "traits": {}
+}

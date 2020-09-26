@@ -1,6 +1,6 @@
 from wikipedia import WikipediaPage
-import json
 import wolframalpha
+import json
 import wikipedia
 import wit
 
@@ -37,13 +37,10 @@ if __name__ == '__main__':
 	page = wikipedia.page(search[0])
 
 	print(type(page))
-
 	print(page.summary)
 
+	import json
 
-	utterance = "Porsche 911"
-	# print(json.dumps(get_response_wolframaplha(utterance), indent=4, sort_keys=True))
-
-	wolframResponse = wolframalphaClient.query(utterance)
-	print(wolframResponse)
+	response = get_response_wit("i want to learn about the porsche 911")
+	print(json.dumps(response, indent=4, sort_keys=True))
 
