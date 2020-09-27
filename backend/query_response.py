@@ -35,6 +35,7 @@ def get_response_wit(message: str) -> json:
 	return witClient.message(message)
 
 
+
 if __name__ == '__main__':
 	search_phrase = "Porsche 911"
 	response = get_response_wikipedia(search_phrase)

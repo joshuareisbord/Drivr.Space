@@ -99,7 +99,7 @@ def get_specific_model(model_to_find: str, models: dict, exact_model=False) -> d
 	"""
 	# There are models contained in the dictionary
 
-	toReturn = {"sucess": False, "models": None}
+	# toReturn = {"sucess": False, "models": None}
 	vehicle_make_index = get_tags_and_index_from_master_list()["model"]
 
 	# If the models arg contains models from a specific make
@@ -113,7 +113,7 @@ def get_specific_model(model_to_find: str, models: dict, exact_model=False) -> d
 				# print("Looking for exact model")
 				if current_vehicle[vehicle_make_index] == model_to_find:
 					found_models.append(current_vehicle)
-					toReturn["success"] = True
+					# toReturn["success"] = True
 				else:
 					continue
 
@@ -122,26 +122,24 @@ def get_specific_model(model_to_find: str, models: dict, exact_model=False) -> d
 				# print("Not looking for exact model")
 				if model_to_find in current_vehicle[vehicle_make_index]:
 					found_models.append(current_vehicle)
-					toReturn["success"] = True
+					# toReturn["success"] = True
 				else:
 					continue
 	# The previous search was unsuccessful. There are no vehicles in the models.
 	else:
-		return toReturn
+		return {"success": False, "models": []}
 
 	# Was there vehicles added to found_models
-	if len(found_models) != 0:
-		toReturn["models"] = found_models  # Add the found vehicles to the
+	if len(found_models) == 0:
+		return {"success": False, "models": []}
 
-	return toReturn
+	return {"success": True, "models": found_models}
 
 if __name__ == '__main__':
 
 	try:
-		print(json.dumps(get_specific_model("Aztek", get_all_models_by_make("Pontiac"), exact_model=False), indent=True))
+		print(json.dumps(get_specific_model("911", get_all_models_by_make("Porsche"), exact_model=False)))
 
 	except:
 		create_sorted_dict_of_models_by_brand(write_to_json=True)
 		get_tags_and_index_from_master_list(write_to_json=True)
-
-

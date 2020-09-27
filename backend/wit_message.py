@@ -2,10 +2,6 @@ import json
 
 class witObjects:
 
-	__reponse = None
-	__intents = None
-	__entities = None
-
 	def __init__(self, jsonResponse: json) -> None:
 		"""
 		Class contructor for witObjects
@@ -14,6 +10,18 @@ class witObjects:
 		self.__reponse = jsonResponse
 		self.__intents = jsonResponse["intents"][0]
 		self.__entities = jsonResponse["entities"]
+
+	def get_make_and_model(self) -> dict:
+		"""
+		Gets make and model from a message and sets them as class attributes
+		:param entities: these are the entities which the make and model will be pulled from
+		:return: Dictionary containing the make and model.
+		"""
+		try:
+			return {"make": self.__entities["vehicle_make:vehicle_make"],
+					"model": self.__entities["vehicle_model:vehicle_model"]}
+		except:
+			raise Exception("Failed to populate __make and __model in witObject class!")
 
 	def get_response(self) -> json:
 		"""

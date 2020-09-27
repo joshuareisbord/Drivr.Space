@@ -1,18 +1,32 @@
 """
 This is the intents module
 """
-from wit_message import witObjects
+from backend.query_response import get_response_wit
+from backend.generate_response import generate_research_response_json
+from backend.wit_message import witObjects  # This might need to be changed when moving project to AWS
 import json
 
-def intent_driver(intents: witObjects) -> str:
+def intent_driver(message: json) -> json:
+
+    # Need to agree to json format!
+    response = witObjects(get_response_wit(message))
+
+    # intents = response.get_intents()
+
+    make = response.get_make_and_model()["make"][0]["body"]
+    model = response.get_make_and_model()["model"][0]["body"]
+
+    print(make)
+    print(model)
+
     try:
-        if intents.get_intents()["name"] == "buy_vehicle":
+        if response.get_intents()["name"] == "buy_vehicle":
             # Do this
             return "buy"
-        elif intents.get_intents()["name"] == "research_vehicle":
-            # Do this
-            return "research"
-        elif intents.get_intents()["name"] == "sell_vehicle":
+        elif response.get_intents()["name"] == "research_vehicle":
+            # Collect information about the exact vehicle in the message.
+            return generate_research_response_json(make, model)
+        elif response.get_intents()["name"] == "sell_vehicle":
             # Do this
             return "sell"
         else:
@@ -20,32 +34,6 @@ def intent_driver(intents: witObjects) -> str:
     except:
         raise Exception("There was an error, message did not have an intent")
 
-def send_research_reponse(intent: witObjects) -> json:
-    # get vehicle type and model and send it through the wikipedia thing to try to correct the name
-    # find the vehicle in the csv file and get information about the newest model year of said vehicle
-    # create json reponse containing the summary of the vehicle from wikipedia, and the relevent information about
-    # engine size, fuel economy, seats, etc...
-
-    reponse = {
-               "make": None,
-               "model": None,
-               "year": None,
-               "vehicle_class": None,
-               "rangeCity": None,
-               "rangeHwy": None,
-               "range": None,
-               "mpg": None,
-               "fuel_grade": None,
-               "drive": None,
-               "transmission": None,
-               }
-
-    try:
-        make = witObjects.get_entities()["vehicle_make:vehicle_make"]
-
-    except:
-        make = None
-        model = None
-
-
-
+if __name__ == '__main__':
+    message = "i want to learn about the Porsche 911"
+    print(intent_driver(message))
