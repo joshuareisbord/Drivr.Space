@@ -7,8 +7,11 @@ from backend.wit_message import witObjects  # This might need to be changed when
 import json
 
 def intent_driver(message: json) -> json:
-
-    # Need to agree to json format!
+    """
+    Passing a message will determine the intent, and respond with the vehicle information.
+    :param message: json message passed from the website
+    :return: json containing all the information for said vehicle.
+    """
     response = witObjects(get_response_wit(message))
 
     # intents = response.get_intents()
