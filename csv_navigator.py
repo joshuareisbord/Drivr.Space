@@ -3,31 +3,41 @@ import json
 import pprint
 
 
-def get_tags_and_index_from_master_list():
+def get_tags_and_index_from_master_list(write_to_json=False) -> dict:
 	"""
 	Gets a list of keys and their respective index relative to the vehicle entries in vehicles.csv
+	:param write_to_json: Write dictionary to json file if true. Useful for testing.
 	:return: dictionary of keys and there index values in in vehicles.csv
 	"""
 	with open('vehicles.csv') as csvfile:
 		readCSV = csv.reader(csvfile, delimiter=',')
-		dict = {}
+		dictionary = {}
 		for row in readCSV:
 			for element in row:
-				dict[str(element)] = row.index(element)
+				dictionary[str(element)] = row.index(element)
 			break
-		return dict
 
-def create_dict_of_brands_and_models():
+		# Write dictionary to json file
+		if write_to_json:
+			with open("tags_and_index.json", "w") as file:
+				json.dump(dictionary, file, sort_keys=False, indent=2)
+
+		# Return the dictionary of all the tags and their index positions
+		return dictionary
+
+
+def create_sorted_dict_of_models_by_brand(write_to_json=False) -> dict:
 	"""
-	Sorts vehicles in vehicles.csv into their respective keys based on make.
-	:return: Dictionary of vehicles sorted by their make in key values
+	Sorts vehicles in vehicles.csv into their respective keys based on make make, and writes to data.json
+	:param write_to_json: Write dictionary to json file if true. Useful for testing.
+	:return: dictionary
 	"""
 	with open('vehicles.csv') as csvfile:
-		readCSV    = csv.reader(csvfile, delimiter=',')
+		readCSV = csv.reader(csvfile, delimiter=',')
 		make_index = get_tags_and_index_from_master_list()['make']
 		csvEntries = []
-		dict       = {}
-		makes      = []
+		dict = {}
+		makes = []
 
 		# Creates a list of all makes of vehicles in the database
 		for row in readCSV:
@@ -49,8 +59,14 @@ def create_dict_of_brands_and_models():
 				dict[key] = tuple(lst)
 			lst = []
 
-		with open("data.json", "w") as fp:
-			json.dump(dict, fp, sort_keys=False, indent=2)
+		# Write all data to a json file
+		if write_to_json:
+			with open("data.json", "w") as file:
+				json.dump(dict, file, sort_keys=False, indent=2)
+
+		# Return the dictionary of sorted vehicles based on make
+		return dict
+
 
 def get_all_models_by_make(make: str) -> dict:
 	"""
@@ -59,20 +75,20 @@ def get_all_models_by_make(make: str) -> dict:
 	:return: dictionary containing load result, and data from the file
 	"""
 
-	# Try to open data.json
+	# Try load all the vehicles into a dictionary
 	try:
-		with open('data.json') as data:
-			data = json.load(data)
-			# Pull all the vehicles from a make of automobiles.
-			try:
-				make_models = data[make]
-				return {"success": True, "models": [make_models]}
-			# Specified make was not found in the file
-			except:
-				return {"success": False, "models": [None]}
+		data = create_sorted_dict_of_models_by_brand()
+		# Pull all the vehicles from a make of automobiles.
+		try:
+			make_models = data[make]
+			return {"success": True, "models": [make_models]}
+		# Specified make was not found in the file
+		except:
+			return {"success": False, "models": [None]}
 	# JSON file could not be loaded or was not present.
 	except:
-		raise Exception("Unable to load/find the 'data.json' file! Please generate it using create_dict_of_brands()!")
+		raise Exception("Unable to load vehicle data!")
+
 
 def get_specific_model(model_to_find: str, models: dict, exact_model=False) -> dict:
 	"""
@@ -85,11 +101,7 @@ def get_specific_model(model_to_find: str, models: dict, exact_model=False) -> d
 	# There are models contained in the dictionary
 
 	toReturn = {"sucess": False, "models": None}
-
-	# Get index value of model
-	with open("tagsandindex.json") as data:
-		file = json.load(data)
-		vehicle_make_index = file["model"]
+	vehicle_make_index = get_tags_and_index_from_master_list()["model"]
 
 	# If the models arg contains models from a specific make
 	if models["success"]:
@@ -125,4 +137,12 @@ def get_specific_model(model_to_find: str, models: dict, exact_model=False) -> d
 	return toReturn
 
 if __name__ == '__main__':
-	print(json.dumps(get_specific_model("Aztek", get_all_models_by_make("Pontiac"), exact_model=False), indent=True))
+
+	try:
+		print(json.dumps(get_specific_model("Aztek", get_all_models_by_make("Pontiac"), exact_model=False), indent=True))
+
+	except:
+		create_sorted_dict_of_models_by_brand(write_to_json=True)
+		get_tags_and_index_from_master_list(write_to_json=True)
+
+
