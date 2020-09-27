@@ -1,6 +1,5 @@
 import csv
 import json
-import pprint
 
 
 def get_tags_and_index_from_master_list(write_to_json=False) -> dict:
