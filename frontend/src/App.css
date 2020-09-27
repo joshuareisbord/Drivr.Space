@@ -13,6 +13,69 @@
   }
 }
 
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.question {
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type=text] {
+  width: 50%;
+  box-sizing: border-box;
+  padding-top: 10px;
+  padding-right: 80px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
+input[type=submit] {
+  height: 39px;
+  background-color: #282c34;
+  color: white;
+}
+
+.footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.carInfo {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  flex: 1 0 auto;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
